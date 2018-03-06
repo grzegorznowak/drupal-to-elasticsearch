@@ -65,6 +65,14 @@ Total number of documents written to ES in the end: 6611
 @see comments under `esWrite\writeNodesLazily` for more insights into RAM usage
 ## Tests
 
+### Requirements
+
+Need to have an ES instance under local port `127.0.0.1:9300`
+
+You can invoke a set of Units (with coverage as long as you have xdebug installed) with
+`./vendor/bin/phpunit --coverage-html ./tests/reports`
+
+
 
 ## Features (or a Roadmap if you like)
 

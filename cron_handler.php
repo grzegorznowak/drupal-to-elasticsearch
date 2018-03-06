@@ -11,11 +11,11 @@ use Elasticsearch\ClientBuilder;
 
 // those are just WIP paths/configs. Will read those from ARGS list ultimately
 const BATCH_SIZE  = 25;
-const DRUPAL_PATH = '/var/www/My_Webs/takethefamily/project';
-const TEST_ES_HOST    = '127.0.0.1';
+const DRUPAL_PATH = '/path/to/drupal';
+const ES_HOST     = '127.0.0.1';
 
 $clientBuilder = ClientBuilder::create();     // Instantiate a new ClientBuilder
-$clientBuilder->setHosts([TEST_ES_HOST]);     // Set the hosts
+$clientBuilder->setHosts([ES_HOST]);     // Set the hosts
 $esClient = $clientBuilder->build();          // Build the client object
 
 $contentTypes = drupalConnector\grabContentTypes(DRUPAL_PATH);
