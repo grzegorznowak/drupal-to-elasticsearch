@@ -1,0 +1,21 @@
+<phpunit bootstrap="vendor/autoload.php" coverage-html="./">
+    <!--<listeners>-->
+        <!-- sadly we can't use it since our php is too old. And it can't be newer since Drupal 6.x -->
+        <!--<listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />-->
+    <!--</listeners>-->
+    <testsuites>
+        <testsuite name="Core Suite">
+            <directory suffix=".php">tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="serialize_precision" value="14"/>
+    </php>
+</phpunit>
