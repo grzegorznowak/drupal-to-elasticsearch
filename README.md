@@ -8,9 +8,9 @@ Due to the lack of serious ElasticSearch support for Drupal 6 we need a platform
 entities onto ElasticSearch for the purpose of future reuse of those in a non-Drupal microservice or in bespoke migration tool
 between Drupal versions/installations. 
 Planned coverage of entities:
-- nodes + all CCK fields
-- taxonomies
-- menus
+- nodes + all CCK fields (works)
+- taxonomies (planned)
+- menus (planned)
 
 
 ## Premises
