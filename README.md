@@ -17,8 +17,8 @@ Planned coverage of entities:
 
 Migrating Drupal has never been an easy task. Not onto major upgraded version of itself nor onto different platforms.
 With an interim layer of relations-less datastore (like ElasticSearch) one in theory could make his target platform completely
-unaware of the initial Drupal schema and create a bespoke tool around the data as he pleases (or make an specific import tool for
-a different CMS, wordpress and such).
+unaware of the initial Drupal schema and create a bespoke tool around the data as he pleases (or make a specific import tool for
+a different CMS: wordpress and such).
 ElasticSearch has been picked due to it's simplicity and speed, but also we think it's just as good a database as one 
 can have. Especially given it resolves the need for having a separate search engine on top of anything one would use otherwise.
 Which was exactly our case.
@@ -41,13 +41,13 @@ release to try and attempt to.
 
 ## Installation
 
-Just clone the project, update parameters in cron_handler.php (namely Drupala installation path and ES address) and invoke it with a simple `php -f cron_handler.php`
+Just clone the project, update parameters in cron_handler.php (namely Drupal installation path and ES address) and invoke it with a simple `php -f cron_handler.php`
 
  
 ## Running / Sample output  
 
-The tool has a basic sanity checking built-in by default. The simplest use case is to run it first from shel manually and see
-if runs through OK. Then can plugin to cron. Need to extend it with more robust failure reporting, but that's for another sitting... 
+The tool has a basic sanity checking built-in by default. The simplest use case is to run it first from shell manually and see
+if runs through OK. Then can plug into to a proper crontab. (Need to still extend it with more robust failure reporting, but that's for another sitting...)
 ````
 > php -f cron_handler.php
 Type: blog. Processing batch no. 2, batch items processed total so far: 50, memory usage: 70 MiB            
@@ -62,14 +62,15 @@ Total number of documents written to ES in the end: 6611
 
 ````
 
-@see comments under `esWrite\writeNodesLazily` for more insights into RAM usage
+@see comments under `esWrite\writeNodesLazily` for more insights into the RAM usage
+
 ## Tests
 
 ### Requirements
 
-Need to have an ES instance under local port `127.0.0.1:9300`
+You must have an ES instance installed and running on your localhost (`127.0.0.1`)
 
-You can invoke a set of Units (with coverage as long as you have xdebug installed) with
+Invoke a set of Units (with coverage as long as you have xdebug installed) with
 `./vendor/bin/phpunit --coverage-html ./tests/reports`
 
 
