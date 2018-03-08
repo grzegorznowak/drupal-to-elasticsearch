@@ -96,3 +96,4 @@ Invoke a set of Units (with coverage as long as you have xdebug installed) with
 * Parsing Drupal onto ES is not trivial task. The tool here has been forged based on a moderately big application with 30+ content types
 and possibly hundreds of CCK fields, so should cover pretty wide variation of use cases already. In any other case the go-to place
 is the `drupalReade\rawNodeToES` function, that tries to make best guess over what to give ES for his own mappings' auto-guesser
+* __Also beware__ that the tool will attempt to index as many fields as possible, including possibly the ones hidden from general audience etc. So it's up to the user of the ES data to take or of applying filters in their queries/display logic.
