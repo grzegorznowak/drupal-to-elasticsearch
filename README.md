@@ -29,8 +29,8 @@ Which was exactly our case.
 
 #### Drupal
 Our specific case requires integration with Drupal 6.x, so it's the only supported version for now. But really the only
-part that really needs to know about what version of Drupal are we using is the connector logic, so it's fairly easy
-to extended, should anyone wish for it.
+part that needs to know about what version of Drupal is being used, is the connector logic, so it's fairly easy
+to be extended, should anyone wish for it.
  
  
 #### ElasticSearch
