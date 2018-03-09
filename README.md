@@ -88,7 +88,7 @@ Invoke a set of Units (with coverage as long as you have xdebug installed) with
  full re-indexation of an entity class, which in practice would wipe out stalled content easily. Additionally making stuff `unpublish` instead
  of full frontal removal should do the job as well, just then such content need to be tackled on ES query level no to show up anywhere.
 * (Extra, depends on the previous point to make any sense) Everytime entity schema gets updated, it will get reindexed to a new working index and it's alias updated behind the scene
-* **Built with love using quasi-functional no-classes PHP, with as little side-effects as possible for all your Clojure/Haskell believers :)**
+* **Built with love using quasi-functional no-classes PHP, with as little side-effects as possible for all us Clojure/Haskell believers :)**
 
 ## Disclaimer / Known Issues
 
