@@ -8,17 +8,17 @@ Due to the lack of serious ElasticSearch support for Drupal 6 we need a platform
 entities onto ElasticSearch for the purpose of future reuse of those in a non-Drupal microservice or in bespoke migration tool
 between Drupal versions/installations. 
 Planned coverage of entities:
-- nodes + all CCK fields
-- taxonomies
-- menus
+- nodes + all CCK fields (works)
+- taxonomies (planned)
+- menus (planned)
 
 
 ## Premises
 
 Migrating Drupal has never been an easy task. Not onto major upgraded version of itself nor onto different platforms.
 With an interim layer of relations-less datastore (like ElasticSearch) one in theory could make his target platform completely
-unaware of the initial Drupal schema and create a bespoke tool around the data as he pleases (or make an specific import tool for
-a different CMS, wordpress and such).
+unaware of the initial Drupal schema and create a bespoke tool around the data as he pleases (or make a specific import tool for
+a different CMS: wordpress and such).
 ElasticSearch has been picked due to it's simplicity and speed, but also we think it's just as good a database as one 
 can have. Especially given it resolves the need for having a separate search engine on top of anything one would use otherwise.
 Which was exactly our case.
@@ -29,8 +29,8 @@ Which was exactly our case.
 
 #### Drupal
 Our specific case requires integration with Drupal 6.x, so it's the only supported version for now. But really the only
-part that really needs to know about what version of Drupal are we using is the connector logic, so it's fairly easy
-to extended, should anyone wish for it.
+part that needs to know about what version of Drupal is being used, is the connector logic, so it's fairly easy
+to be extended, should anyone wish for it.
  
  
 #### ElasticSearch
@@ -41,13 +41,13 @@ release to try and attempt to.
 
 ## Installation
 
-Just clone the project, update parameters in cron_handler.php (namely Drupala installation path and ES address) and invoke it with a simple `php -f cron_handler.php`
+Just clone the project, update parameters in cron_handler.php (namely Drupal installation path and ES address) and invoke it with a simple `php -f cron_handler.php`
 
  
 ## Running / Sample output  
 
-The tool has a basic sanity checking built-in by default. The simplest use case is to run it first from shel manually and see
-if runs through OK. Then can plugin to cron. Need to extend it with more robust failure reporting, but that's for another sitting... 
+The tool has a basic sanity checking built-in by default. The simplest use case is to run it first from shell manually and see
+if runs through OK. Then can plug into to a proper crontab. (Need to still extend it with more robust failure reporting, but that's for another sitting...)
 ````
 > php -f cron_handler.php
 Type: blog. Processing batch no. 2, batch items processed total so far: 50, memory usage: 70 MiB            
@@ -62,14 +62,15 @@ Total number of documents written to ES in the end: 6611
 
 ````
 
-@see comments under `esWrite\writeNodesLazily` for more insights into RAM usage
+@see comments under `esWrite\writeNodesLazily` for more insights into the RAM usage
+
 ## Tests
 
 ### Requirements
 
-Need to have an ES instance under local port `127.0.0.1:9300`
+You must have an ES instance installed and running on your localhost (`127.0.0.1`)
 
-You can invoke a set of Units (with coverage as long as you have xdebug installed) with
+Invoke a set of Units (with coverage as long as you have xdebug installed) with
 `./vendor/bin/phpunit --coverage-html ./tests/reports`
 
 
@@ -87,7 +88,7 @@ You can invoke a set of Units (with coverage as long as you have xdebug installe
  full re-indexation of an entity class, which in practice would wipe out stalled content easily. Additionally making stuff `unpublish` instead
  of full frontal removal should do the job as well, just then such content need to be tackled on ES query level no to show up anywhere.
 * (Extra, depends on the previous point to make any sense) Everytime entity schema gets updated, it will get reindexed to a new working index and it's alias updated behind the scene
-* **Built with love using quasi-functional no-classes PHP, with as little side-effects as possible for all your Clojure/Haskell believers :)**
+* **Built with love using quasi-functional no-classes PHP, with as little side-effects as possible for all us Clojure/Haskell believers :)**
 
 ## Disclaimer / Known Issues
 
@@ -95,3 +96,4 @@ You can invoke a set of Units (with coverage as long as you have xdebug installe
 * Parsing Drupal onto ES is not trivial task. The tool here has been forged based on a moderately big application with 30+ content types
 and possibly hundreds of CCK fields, so should cover pretty wide variation of use cases already. In any other case the go-to place
 is the `drupalReade\rawNodeToES` function, that tries to make best guess over what to give ES for his own mappings' auto-guesser
+* __Also beware__ that the tool will attempt to index as many fields as possible, including possibly the ones hidden from general audience etc. So it's up to the user of the ES data to apply data filters in their query/display logic.
