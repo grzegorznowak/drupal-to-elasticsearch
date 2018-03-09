@@ -48,7 +48,7 @@ function grabContentTypes($drupalPath) {
 function createNodeReaders($drupalPath, $contentType) {
 	$nodeLoader = function($batchSize, $batchNo = 0) use ($contentType, $drupalPath) {
 		maybeBootstrapDrupal($drupalPath);
-		$result = db_query("SELECT nid FROM node WHERE type = '%s' AND status = 1 LIMIT %d, %d ", $contentType, $batchNo * $batchSize, $batchSize);
+		$result = db_query("SELECT nid FROM node WHERE type = '%s' AND status = 1 LIMIT %d OFFSET %d ", $contentType, $batchSize, $batchNo * $batchSize);
 		$nodes  = array();
 		while ($obj = db_fetch_object($result)) {
 			$nodes[] = drupalReader\rawNodeToES(node_load($obj->nid, $revision = NULL, $reset = True));

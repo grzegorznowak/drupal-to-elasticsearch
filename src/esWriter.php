@@ -211,7 +211,7 @@ function writeNodesLazily(ESClient $client, $batchSize, $nodeLazyLoader) {
 			// Roughly speaking it leaks ~100MB per 1k nodes. So should be able to
 			// import a moderately grown app with a PC-standard amount of memory
 			// otherwise need to wait for a proper incremental update handler or buy more mem sticks :saddest_troll_face:
-			echo "Type: ".$firstNode['type'].". Processing batch no. $batchNo, batch items processed total so far: ".($batchNo * $batchSize).", memory usage: ".(memory_get_peak_usage(true)/1024/1024)." MiB            \r";
+			echo "Type: ".$firstNode['type'].". Processing batch no. $batchNo, batch items processed total so far: ".$totalProcessed.", memory usage: ".(memory_get_peak_usage(true)/1024/1024)." MiB            \r";
 
 		}
 		echo "\n";
