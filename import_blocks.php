@@ -10,7 +10,7 @@ use DTE\esReader;
 use Elasticsearch\ClientBuilder;
 
 
-function import_block($es_host, $drupal_path) {
+function import_blocks($es_host, $drupal_path) {
 
 	echo "\nImporting blocks from $drupal_path using es host: $es_host\n";
 

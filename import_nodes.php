@@ -7,7 +7,7 @@ use DTE\esReader;
 use Elasticsearch\ClientBuilder;
 
 
-function import_node($es_host, $drupal_path) {
+function import_nodes($es_host, $drupal_path) {
 
 	echo "\nImporting nodes from $drupal_path using es host: $es_host\n";
 
