@@ -8,7 +8,8 @@ Due to the lack of serious ElasticSearch support for Drupal 6 we need a platform
 entities onto ElasticSearch for the purpose of future reuse of those in a non-Drupal microservice or in bespoke migration tool
 between Drupal versions/installations. 
 Planned coverage of entities:
-- nodes + all CCK fields (works)
+- nodes + all CCK fields (__works__)
+- blocks from the core block module (aka boxes) (__works__)
 - taxonomies (planned)
 - menus (planned)
 
@@ -41,7 +42,10 @@ release to try and attempt to.
 
 ## Installation
 
-Just clone the project, update parameters in cron_handler.php (namely Drupal installation path and ES address) and invoke it with a simple `php -f cron_handler.php`
+* Clone the project
+* `composer install` to fetch dependencies and prime autoloader 
+* Copy `cron_handler.tpl.php` to `cron_handler.php` (updating it's parameters in code for Drupal and ElasticSearch endpoints) 
+* and invoke it with a simple `php -f cron_handler.php`
 
  
 ## Running / Sample output  

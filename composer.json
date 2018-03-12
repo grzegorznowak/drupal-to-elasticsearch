@@ -8,6 +8,7 @@
         "files": [
             "src/esReader.php",
             "src/esWriter.php",
+            "src/esValidation.php",
             "src/drupalReader.php",
             "src/drupalConnector.php"
         ]

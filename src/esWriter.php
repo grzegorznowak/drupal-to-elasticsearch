@@ -81,19 +81,22 @@ function getRawIndexName($indexName) {
 	return $indexName.'_'.time().'_'.rand(0, 99999); // add a random stuff to avoid clashes, just a heuristic but should work well for us
 }
 
-function indexNameFromEntity($indexPrefix, $entityType, $entity) {
+function indexNameFromEntity($indexPrefix, $entityType, $entity = Null) {
 	switch($entityType) {
 		case 'node':
-			$nodeType = $entity['type'];
-			return getRawIndexName($indexPrefix.''.$entityType.'_'.$nodeType);
+			return getRawIndexName(aliasNameFromEntity($indexPrefix, $entityType, $entity));
+		case 'block':
+			return getRawIndexName(aliasNameFromEntity($indexPrefix, $entityType, $entity));
 	}
 }
 
-function aliasNameFromEntity($indexPrefix, $entityType, $entity) {
+function aliasNameFromEntity($indexPrefix, $entityType, $entity = Null) {
 	switch($entityType) {
-	case 'node':
-		$nodeType = $entity['type'];
-		return $indexPrefix.''.$entityType.'_'.$nodeType;
+		case 'node':
+			$nodeType = $entity['type'];
+			return $indexPrefix.''.$entityType.'_'.$nodeType;
+		case 'block':
+			return $indexPrefix.'blocks';
 	}
 }
 
@@ -111,8 +114,8 @@ function getNodeAliasName($indexPrefix, $nodeType) {
  * @param          $entities
  */
 function writeInto(ESClient $client, $aliasName, $indexName, $entities) {
-
 	$entitiesWrite = function() use($client, $indexName, $entities) {
+
 		$params = [
 			'index' => $indexName,
 			'type'  => $indexName,
@@ -130,21 +133,25 @@ function writeInto(ESClient $client, $aliasName, $indexName, $entities) {
 		}
 		return $client->bulk($params);
 	};
+
 	try {
 		$params = ['index' => $indexName];
+
 		$client->count($params);
+
 		$response = $entitiesWrite();  // not first time we write to this index, just proceed
 	} catch(Missing404Exception $e) {
 		// first document in the index
 		createIndexAndPutSaneDefaultsIntoIt($client, $indexName);
 		$response = $entitiesWrite();
+
 		// now need to create it's alias
 		putAlias($client, $indexName, $aliasName);
+	} catch(\Exception $e) {
+		var_dump($e);
 	}
 
 	return $response;
-
-
 }
 
 function createIndexAndPutSaneDefaultsIntoIt(ESClient $client, $indexName) {
@@ -215,10 +222,38 @@ function writeNodesLazily(ESClient $client, $batchSize, $nodeLazyLoader) {
 
 		}
 		echo "\n";
-		return ['aliasName' => $aliasName, 'indexName' => $indexName, 'count' => $totalProcessed];
+		return [['aliasName' => $aliasName, 'indexName' => $indexName, 'count' => $totalProcessed]];
 	};
 
 	// fist node is used to infer ES index naming
 	$firstNodes = $nodeLazyLoader(1, 0);  // a list, either empty or with one element
-	return array_map($writerFn, $firstNodes);
+	return array_map('array_pop', array_map($writerFn, $firstNodes));
+}
+
+function writeBlocks(ESClient $client, $blocks) {
+	$indexName = indexNameFromEntity('', 'block');
+	$aliasName = aliasNameFromEntity('', 'block');
+
+	$response = writeInto($client, $aliasName, $indexName, $blocks);
+
+	if($response['errors']) {
+		echo "\nErrors importing blocks:\n";
+		var_dump($response);
+	}
+	return [[['aliasName' => $aliasName, 'indexName' => $indexName, 'count' => count($blocks)]]]; // wrap side effects
+}
+
+
+// a set of helper methods for getting values from esWriter responses
+
+function extractIndexName($row) {
+	return $row['indexName'];
+}
+
+function extractAliasName($row) {
+	return $row['aliasName'];
+}
+
+function extractCount($row) {
+	return $row['count'];
 }

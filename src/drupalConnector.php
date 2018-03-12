@@ -21,13 +21,14 @@ function maybeBootstrapDrupal($drupalPath) {
 		if(!chdir($drupalPath)) {
 			throw new Exception("Unable to chdir to the drupal path");
 		}
-		$_SERVER['REMOTE_ADDR'] = '127.1.0.1';
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		require ('cli/CliCommandRunner.php');
 		require_once './includes/bootstrap.inc';
 		drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 		error_reporting(E_ALL);
 		ini_set('display_errors', TRUE);
 		ini_set('display_startup_errors', TRUE);
+		restore_error_handler(); // we don't want to use Drupals error handler
 		$bootstraped = true;
 
 	}
@@ -36,6 +37,16 @@ function maybeBootstrapDrupal($drupalPath) {
 function grabContentTypes($drupalPath) {
 	maybeBootstrapDrupal($drupalPath);
 	return array_keys(node_get_types($op = 'types', $node = Null, $reset = True));
+}
+
+function grabCustomBlocks($drupalPath) {
+	maybeBootstrapDrupal($drupalPath);
+	$query  = db_query('SELECT * FROM {boxes}');
+	$blocks = [];
+	while ($block = db_fetch_array($query)) {
+		$blocks[] = $block;
+	}
+	return $blocks;
 }
 
 /**
