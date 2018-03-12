@@ -26,6 +26,7 @@ final class ESTests extends TestCase {
 	const TEST_ES_HOST    = '127.0.0.1';
 	const TEST_INDEX_NAME = 'test-index-dte';
 
+
 	protected $esClient = null;
 
 	protected function setUp() {

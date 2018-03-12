@@ -1,4 +1,5 @@
 .idea
 vendor
+cron_handler.php
 tests/stubs/drupal*
 tests/reports
