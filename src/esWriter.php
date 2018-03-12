@@ -123,7 +123,7 @@ function writeInto(ESClient $client, $aliasName, $indexName, $entities) {
 			$params['body'][] = array(
 				'index' => array(
 					'_index' => $indexName,
-					'_type' => '$indexName',
+					'_type'  => $indexName,
 				)
 			);
 			$params['body'][] = $entities[$i];
