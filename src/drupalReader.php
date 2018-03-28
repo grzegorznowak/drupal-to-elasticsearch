@@ -61,6 +61,6 @@ function rawNodeToES($aRawNode) {
 		return $node;
 	};
 
-	return array_map($inverseTaxonomies, array_map($treatEverythingAString, array_filter($nodeArray, $isIndexableField, $flag = ARRAY_FILTER_USE_BOTH)));
+	return $inverseTaxonomies(array_map($treatEverythingAString, array_filter($nodeArray, $isIndexableField, $flag = ARRAY_FILTER_USE_BOTH)));
 }
 
