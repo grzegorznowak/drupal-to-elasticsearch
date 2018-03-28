@@ -11,3 +11,4 @@ const ES_HOST     = 'https://user:pass@es.domain:9200';
 
 import_nodes(ES_HOST, DRUPAL_PATH);
 import_blocks(ES_HOST, DRUPAL_PATH);
+

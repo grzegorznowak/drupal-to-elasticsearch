@@ -77,3 +77,14 @@ function countImportableNodes($drupalPath, $contentType) {
 	}
 	return 0;
 }
+
+function grabMenus($drupalPath) {
+	maybeBootstrapDrupal($drupalPath);
+	$menus = menu_get_names();
+	return array_map(function($menu_name) {
+		return [
+			'menu_name'   => $menu_name,
+			'menu_struct' => menu_tree_all_data($menu_name)
+		];
+	},	$menus);
+}
